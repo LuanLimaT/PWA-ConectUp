@@ -34,7 +34,7 @@ interface WebSocketContextType {
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
 
 // URL do servidor Socket.IO - substitua pela URL do seu servidor
-const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL || "http://localhost:3001"
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL || "http://localhost:3002"
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
