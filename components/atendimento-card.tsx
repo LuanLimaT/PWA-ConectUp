@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { User, Clock } from "lucide-react"
@@ -12,11 +13,11 @@ interface Atendimento {
   status: "waiting" | "active" | "closed"
   lastMessage?: {
     content: string
-    timestamp: Date
+    timestamp: string | Date
     sender: "client" | "agent"
   }
   unreadCount: number
-  startedAt: Date
+  startedAt: string | Date
 }
 
 interface AtendimentoCardProps {
@@ -26,6 +27,12 @@ interface AtendimentoCardProps {
 }
 
 export function AtendimentoCard({ atendimento, isActive, onClick }: AtendimentoCardProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "waiting":
@@ -88,14 +95,20 @@ export function AtendimentoCard({ atendimento, isActive, onClick }: AtendimentoC
           <div className="flex items-center space-x-1">
             <Clock className="h-3 w-3" />
             <span>
-              {formatDistanceToNow(atendimento.startedAt, {
-                addSuffix: true,
+              {mounted && atendimento.startedAt
+                ? formatDistanceToNow(new Date(atendimento.startedAt), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })
+                : "—"}
+            </span>
+          </div>
+          {mounted && atendimento.lastMessage?.timestamp && (
+            <span>
+              {format(new Date(atendimento.lastMessage.timestamp), "HH:mm", {
                 locale: ptBR,
               })}
             </span>
-          </div>
-          {atendimento.lastMessage && (
-            <span>{format(atendimento.lastMessage.timestamp, "HH:mm", { locale: ptBR })}</span>
           )}
         </div>
       </CardContent>

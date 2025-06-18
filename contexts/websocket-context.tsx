@@ -95,6 +95,8 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
     // Receber nova mensagem
     socketInstance.on("message:new", (message: Message) => {
+      console.log("Mensagem recebida no PWA:", message)
+      
       // Adicionar mensagem à lista
       setMessages((prev) => [...prev, message])
 
